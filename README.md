@@ -260,4 +260,248 @@ FIXTURE=golang npm test
 # Test a single sample or directory
 FIXTURE=swift npm test -- pokedex.json
 FIXTURE=swift npm test -- test/inputs/json/samples
+
+https://segmentfault.com/a/1190000021639944
+```
+
+### 运行补充
+
+编译
+```bash
+npm run build
+```
+
+json 样例 
+
+test.json
+```json
+{
+    "item_id": 111,
+    "store": {
+        "name": "背景",
+        "thumbnail": "http://",
+        "imgurl": "",
+        "desc": "",
+        "price": [
+            {
+                "id": 5,
+                "num": 8,
+                "discount": 8
+            }
+        ],
+        "discount_start": 1677741857,
+        "discount_end": 1677741857
+    },
+    "info": {
+        "anim_type": 1,
+        "anim_url": ""
+    }
+}
+```
+
+#### 把 json 转成 OC-YYModel 格式
+
+```bash
+script/quicktype --src test.json --src-lang json --lang objc-yymodel --class-prefix KK --out KKBGItem.m
+```
+
+运行结果：
+
+```Objective-C
+// KKBGItem.h
+#import <Foundation/Foundation.h>
+
+@class KKBGItem;
+@class KKInfo;
+@class KKStore;
+@class KKPrice;
+
+NS_ASSUME_NONNULL_BEGIN
+
+@interface KKBGItem : NSObject
+@property (nonatomic, assign) NSInteger itemID;
+@property (nonatomic, strong) KKStore *store;
+@property (nonatomic, strong) KKInfo *info;
+@end
+
+@interface KKInfo : NSObject
+@property (nonatomic, assign) NSInteger animType;
+@property (nonatomic, copy)   NSString *animURL;
+@end
+
+@interface KKStore : NSObject
+@property (nonatomic, copy)   NSString *name;
+@property (nonatomic, copy)   NSString *thumbnail;
+@property (nonatomic, copy)   NSString *imgurl;
+@property (nonatomic, copy)   NSString *desc;
+@property (nonatomic, copy)   NSArray<KKPrice *> *price;
+@property (nonatomic, assign) NSInteger discountStart;
+@property (nonatomic, assign) NSInteger discountEnd;
+@end
+
+@interface KKPrice : NSObject
+@property (nonatomic, assign) NSInteger identifier;
+@property (nonatomic, assign) NSInteger num;
+@property (nonatomic, assign) NSInteger discount;
+@end
+
+NS_ASSUME_NONNULL_END
+
+```
+
+```Objective-C
+
+// KKBGItem.m
+#import "KKBGItem.h"
+
+NS_ASSUME_NONNULL_BEGIN
+
+@implementation KKBGItem
+
++ (NSDictionary *)modelCustomPropertyMapper
+{
+    return @{
+        @"itemID": @"item_id", 
+        @"store": @"store", 
+        @"info": @"info", 
+    };
+}
+
+@end
+
+@implementation KKInfo
+
++ (NSDictionary *)modelCustomPropertyMapper
+{
+    return @{
+        @"animType": @"anim_type", 
+        @"animURL": @"anim_url", 
+    };
+}
+
+@end
+
+@implementation KKStore
+
++ (NSDictionary *)modelCustomPropertyMapper
+{
+    return @{
+        @"name": @"name", 
+        @"thumbnail": @"thumbnail", 
+        @"imgurl": @"imgurl", 
+        @"desc": @"desc", 
+        @"price": @"price", 
+        @"discountStart": @"discount_start", 
+        @"discountEnd": @"discount_end", 
+    };
+}
+
++ (NSDictionary *)modelContainerPropertyGenericClass
+{
+    return @{
+        @"price": [KKPrice class],
+    };
+}
+
+@end
+
+@implementation KKPrice
+
++ (NSDictionary *)modelCustomPropertyMapper
+{
+    return @{
+        @"identifier": @"id", 
+        @"num": @"num", 
+        @"discount": @"discount", 
+    };
+}
+
+@end
+
+NS_ASSUME_NONNULL_END
+```
+
+#### 把 json 转成 swift-YYModel 格式
+
+
+```bash
+script/quicktype --src test.json --src-lang json --lang objc-yymodel --class-prefix KK --out KKBGItem.m
+```
+
+运行结果：
+
+```swift
+import Foundation
+
+// MARK: - KKBGItem
+@objcMembers class KKBGItem: NSObject, YYModel {
+    var itemID: Int = 0
+    var store: KKStore?
+    var info: KKInfo?
+
+    static func modelCustomPropertyMapper() -> [String : Any]? {
+        return [
+            "itemID": "item_id", 
+            "store": "store", 
+            "info": "info", 
+        ]
+    }
+}
+
+// MARK: - KKInfo
+@objcMembers class KKInfo: NSObject, YYModel {
+    var animType: Int = 0
+    var animURL: String = ""
+
+    static func modelCustomPropertyMapper() -> [String : Any]? {
+        return [
+            "animType": "anim_type", 
+            "animURL": "anim_url", 
+        ]
+    }
+}
+
+// MARK: - KKStore
+@objcMembers class KKStore: NSObject, YYModel {
+    var name: String = ""
+    var thumbnail: String = ""
+    var imgurl: String = ""
+    var desc: String = ""
+    var price: [KKPrice] = []
+    var discountStart: Int = 0
+    var discountEnd: Int = 0
+
+    static func modelCustomPropertyMapper() -> [String : Any]? {
+        return [
+            "name": "name", 
+            "thumbnail": "thumbnail", 
+            "imgurl": "imgurl", 
+            "desc": "desc", 
+            "price": "price", 
+            "discountStart": "discount_start", 
+            "discountEnd": "discount_end", 
+        ]
+    }
+
+    static func modelContainerPropertyGenericClass() -> [String : Any]? {
+        return [
+            "price": KKPrice.self,
+        ]
+    }
+}
+
+// MARK: - KKPrice
+@objcMembers class KKPrice: NSObject, YYModel {
+    var id: Int = 0
+    var num: Int = 0
+    var discount: Int = 0
+
+    static func modelCustomPropertyMapper() -> [String : Any]? {
+        return [
+            "id": "id", 
+            "num": "num", 
+            "discount": "discount", 
+        ]
+    }
+}
 ```

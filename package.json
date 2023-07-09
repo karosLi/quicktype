@@ -14,7 +14,7 @@
         "test": "script/test",
         "start": "script/watch",
         "clean": "rm -rf dist node_modules *~ packages/*/{dist,node_modules}",
-        "debug": "node --inspect-brk --max-old-space-size=4096 ./dist/index.js"
+        "debug": "node --inspect-brk --max-old-space-size=4096 ./dist/index.js --src test.json --src-lang json --lang objective-c --top-level SNKCP --out cp.m"
     },
     "workspaces": [
         "./packages/quicktype-core",

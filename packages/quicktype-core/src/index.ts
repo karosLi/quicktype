@@ -88,6 +88,7 @@ export { CSharpTargetLanguage, cSharpOptions, CSharpRenderer } from "./language/
 export { PythonTargetLanguage, PythonRenderer, pythonOptions } from "./language/Python";
 export { GoTargetLanguage, GoRenderer, goOptions } from "./language/Golang";
 export { ObjectiveCTargetLanguage, ObjectiveCRenderer, objcOptions } from "./language/Objective-C";
+export { ObjectiveCYYModelTargetLanguage, ObjectiveCYYModelRenderer, objcYYModelOptions } from "./language/Objective-C-YYModel";
 export { JavaTargetLanguage, JavaRenderer, javaOptions } from "./language/Java";
 export { JavaScriptTargetLanguage, JavaScriptRenderer, javaScriptOptions } from "./language/JavaScript";
 export {
@@ -103,6 +104,7 @@ export {
     tsFlowOptions
 } from "./language/TypeScriptFlow";
 export { SwiftTargetLanguage, SwiftRenderer, swiftOptions } from "./language/Swift";
+export { SwiftYYModelTargetLanguage, SwiftYYModelRenderer, swiftYYModelOptions } from "./language/Swift-YYModel";
 export { KotlinTargetLanguage, KotlinRenderer, kotlinOptions } from "./language/Kotlin";
 export { Scala3TargetLanguage, Scala3Renderer, scala3Options } from "./language/Scala3";
 export { SmithyTargetLanguage, Smithy4sRenderer, SmithyOptions } from "./language/Smithy4s";

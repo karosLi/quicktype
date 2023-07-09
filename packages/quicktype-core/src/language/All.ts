@@ -7,11 +7,13 @@ import { GoTargetLanguage } from "./Golang";
 import { CJSONTargetLanguage } from "./CJSON";
 import { CPlusPlusTargetLanguage } from "./CPlusPlus";
 import { ObjectiveCTargetLanguage } from "./Objective-C";
+import { ObjectiveCYYModelTargetLanguage } from "./Objective-C-YYModel";
 import { JavaTargetLanguage } from "./Java";
 import { JavaScriptTargetLanguage } from "./JavaScript";
 import { JavaScriptPropTypesTargetLanguage } from "./JavaScriptPropTypes";
 import { TypeScriptTargetLanguage, FlowTargetLanguage } from "./TypeScriptFlow";
 import { SwiftTargetLanguage } from "./Swift";
+import { SwiftYYModelTargetLanguage } from "./Swift-YYModel";
 import { KotlinTargetLanguage } from "./Kotlin";
 import { Scala3TargetLanguage } from "./Scala3";
 import { SmithyTargetLanguage } from "./Smithy4s";
@@ -36,12 +38,14 @@ export const all: TargetLanguage[] = [
     new CJSONTargetLanguage(),
     new CPlusPlusTargetLanguage(),
     new ObjectiveCTargetLanguage(),
+    new ObjectiveCYYModelTargetLanguage(),
     new JavaTargetLanguage(),
     new TypeScriptTargetLanguage(),
     new JavaScriptTargetLanguage(),
     new JavaScriptPropTypesTargetLanguage(),
     new FlowTargetLanguage(),
     new SwiftTargetLanguage(),
+    new SwiftYYModelTargetLanguage(),
     new Scala3TargetLanguage(),
     new SmithyTargetLanguage(),
     new KotlinTargetLanguage(),

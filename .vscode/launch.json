@@ -9,7 +9,9 @@
       "type": "node",
       "request": "launch",
       "program": "${workspaceRoot}/node_modules/ts-node/dist/_bin.js",
-      "runtimeArgs": ["--nolazy"],
+      "runtimeArgs": [
+        "--nolazy"
+      ],
       "args": [
         "--project",
         "src/cli/tsconfig.json",
@@ -28,7 +30,11 @@
       "type": "node",
       "request": "launch",
       "program": "${workspaceRoot}/node_modules/ts-node/dist/_bin.js",
-      "args": ["--project", "test/tsconfig.json", "test/test.ts"],
+      "args": [
+        "--project",
+        "test/tsconfig.json",
+        "test/test.ts"
+      ],
       "cwd": "${workspaceRoot}",
       "protocol": "inspector",
       "env": {
