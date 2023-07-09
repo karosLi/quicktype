@@ -1,0 +1,22 @@
+{
+    "item_id": 111,
+    "store": {
+        "name": "背景",
+        "thumbnail": "http://",
+        "imgurl": "",
+        "desc": "",
+        "price": [
+            {
+                "id": 5,
+                "num": 8,
+                "discount": 8
+            }
+        ],
+        "discount_start": 1677741857,
+        "discount_end": 1677741857
+    },
+    "info": {
+        "anim_type": 1,
+        "anim_url": ""
+    }
+}
