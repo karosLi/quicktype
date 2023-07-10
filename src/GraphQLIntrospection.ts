@@ -1,4 +1,4 @@
-import { panic } from "quicktype-core";
+import { panic } from "@karosli/quicktype-core";
 import { introspectionQuery } from "graphql";
 import { exceptionToString } from "@glideapps/ts-necessities";
 

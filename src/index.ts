@@ -38,9 +38,9 @@ import {
     readableFromFileOrURL,
     readFromFileOrURL,
     FetchingJSONSchemaStore
-} from "quicktype-core";
-import { schemaForTypeScriptSources } from "quicktype-typescript-input";
-import { GraphQLInput } from "quicktype-graphql-input";
+} from "@karosli/quicktype-core";
+import { schemaForTypeScriptSources } from "@karosli/quicktype-typescript-input";
+import { GraphQLInput } from "@karosli/quicktype-graphql-input";
 
 import { urlsFromURLGrammar } from "./URLGrammar";
 import { introspectServer } from "./GraphQLIntrospection";
@@ -343,14 +343,14 @@ function makeOptionDefinitions(targetLanguages: TargetLanguage[]): OptionDefinit
         targetLanguages.length < 2
             ? []
             : [
-                  {
-                      name: "lang",
-                      alias: "l",
-                      type: String,
-                      typeLabel: makeLangTypeLabel(targetLanguages),
-                      description: "The target language."
-                  }
-              ];
+                {
+                    name: "lang",
+                    alias: "l",
+                    type: String,
+                    typeLabel: makeLangTypeLabel(targetLanguages),
+                    description: "The target language."
+                }
+            ];
     const afterLang: OptionDefinition[] = [
         {
             name: "src-lang",
@@ -597,7 +597,7 @@ function parseOptions(definitions: OptionDefinition[], argv: string[], partial: 
         }
     }
 
-    const options: { rendererOptions: RendererOptions; [key: string]: any } = { rendererOptions: {} };
+    const options: { rendererOptions: RendererOptions;[key: string]: any } = { rendererOptions: {} };
     for (const o of definitions) {
         if (!hasOwnProperty(opts, o.name)) continue;
         const v = opts[o.name] as string;

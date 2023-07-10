@@ -29,9 +29,17 @@
 # npm publish --workspaces --if-present
 
 # 发布 quicktype-core
-# cd packages/quicktype-core
-# npm publish --access public
-# cd -
+cd packages/quicktype-core
+npm publish --access public
+
+cd ../..
+cd packages/quicktype-graphql-input
+npm publish --access public
+
+cd ../..
+cd packages/quicktype-typescript-input
+npm publish --access public
+cd ../..
 
 # 发布 quicktype 指定为公开库
 npm publish --access public

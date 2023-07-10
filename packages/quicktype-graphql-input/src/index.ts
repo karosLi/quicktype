@@ -30,7 +30,7 @@ import {
     Input,
     derefTypeRef,
     RunContext
-} from "quicktype-core";
+} from "@karosli/quicktype-core";
 
 import { TypeKind, GraphQLSchema } from "./GraphQLSchema";
 
@@ -296,7 +296,7 @@ class GQLQuery {
         const nameOrOverride = overrideName || gqlType.name;
         const properties = new Map<string, ClassProperty>();
         let selections = expandSelectionSet(selectionSet, gqlType, false);
-        for (;;) {
+        for (; ;) {
             const nextItem = selections.pop();
             if (!nextItem) break;
             const { selection, optional, inType } = nextItem;

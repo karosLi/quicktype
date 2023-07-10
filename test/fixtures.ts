@@ -23,7 +23,7 @@ import {
     callAndExpectFailure
 } from "./utils";
 import * as languages from "./languages";
-import { RendererOptions } from "quicktype-core";
+import { RendererOptions } from "@karosli/quicktype-core";
 import { mustNotHappen, defined } from "../packages/quicktype-core/dist/support/Support";
 import { DefaultDateTimeRecognizer } from "../packages/quicktype-core/dist/DateTime";
 
@@ -124,7 +124,7 @@ function timeEnd(message: string, suffix: string): void {
 export abstract class Fixture {
     abstract name: string;
 
-    constructor(public language: languages.Language) {}
+    constructor(public language: languages.Language) { }
 
     runForName(name: string): boolean {
         return this.name === name;

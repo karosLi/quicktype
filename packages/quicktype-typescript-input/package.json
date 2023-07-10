@@ -1,18 +1,18 @@
 {
-    "name": "quicktype-typescript-input",
-    "version": "18.0.15",
+    "name": "@karosli/quicktype-typescript-input",
+    "version": "18.0.16",
     "description": "Package for using TypeScript as an input language to quicktype",
     "license": "Apache-2.0",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
-    "repository": "https://github.com/quicktype/quicktype",
+    "repository": "https://github.com/karosLi/quicktype",
     "scripts": {
         "clean": "rm -rf dist node_modules *~",
         "build": "tsc",
         "tslint": "tslint --project ."
     },
     "dependencies": {
-        "quicktype-core": "file:../quicktype-core",
+        "@karosli/quicktype-core": "file:../quicktype-core",
         "typescript": "4.9.5",
         "@mark.probst/typescript-json-schema": "0.55.0"
     },

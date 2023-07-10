@@ -5,7 +5,7 @@ import * as _ from "lodash";
 import * as shell from "shelljs";
 
 import { main as quicktype_, CLIOptions } from "../src";
-import { RendererOptions } from "quicktype-core";
+import { RendererOptions } from "@karosli/quicktype-core";
 import * as languages from "./languages";
 import deepEquals from "./lib/deepEquals";
 
@@ -242,8 +242,8 @@ export function compareJsonFileToJson(args: ComparisonArgs) {
     let jsonAreEqual = strict
         ? callAndReportFailure("Failed to strictly compare objects", () => strictDeepEquals(givenJSON, expectedJSON))
         : callAndReportFailure("Failed to compare objects.", () =>
-              deepEquals(expectedJSON, givenJSON, ASSUME_STRINGS_EQUAL, args)
-          );
+            deepEquals(expectedJSON, givenJSON, ASSUME_STRINGS_EQUAL, args)
+        );
 
     if (!jsonAreEqual) {
         failWith("Error: Output is not equivalent to input.", {
