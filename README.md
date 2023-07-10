@@ -303,6 +303,8 @@ test.json
 
 ```bash
 script/quicktype --src test.json --src-lang json --lang objc-yymodel --class-prefix KK --out KKBGItem.m
+# 简写
+script/quicktype test.json -l objc-yymodel --class-prefix KK --o KKBGItem.m
 ```
 
 运行结果：
@@ -425,7 +427,9 @@ NS_ASSUME_NONNULL_END
 
 
 ```bash
-script/quicktype --src test.json --src-lang json --lang objc-yymodel --class-prefix KK --out KKBGItem.m
+script/quicktype --src test.json --src-lang json --lang swift-yymodel --type-prefix KK --out KKBGItem.swift
+# 简写
+script/quicktype test.json -l swift-yymodel --type-prefix KK --o KKBGItem.swift
 ```
 
 运行结果：
