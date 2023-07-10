@@ -1,6 +1,6 @@
 {
     "name": "@karosli/quicktype",
-    "version": "23.0.0.1",
+    "version": "23.0.1",
     "license": "Apache-2.0",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
