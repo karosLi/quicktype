@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-# brew install --cask docker
 # docker pull schani/quicktype
 docker build --cache-from quicktype -t quicktype .
 docker run -it \
