@@ -14,11 +14,14 @@ function exec(command: string) {
 
 const PUBLISHED = (() => {
     // Get the highest published version of any tag
-    const all = JSON.parse(exec(`npm show quicktype versions --json`));
+    const all = JSON.parse(exec(`npm show @karosli/quicktype versions --json`));
     return all[all.length - 1];
 })();
 
-const CURRENT = exec(`npm version`).match(/quicktype: '(.+)'/)![1];
+// package.json 中的版本号
+const VERSIONSTR = exec(`npm version`).match(/'@karosli\/quicktype': '(.+)',/)!;
+console.log(`VERSIONSTR: ${VERSIONSTR}`);
+const CURRENT = VERSIONSTR[1];
 switch (semver.compare(CURRENT, PUBLISHED)) {
     case -1:
         console.error(`* package.json version is ${CURRENT} but ${PUBLISHED} is published. Patching...`);

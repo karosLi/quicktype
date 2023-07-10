@@ -1,45 +1,32 @@
 #!/usr/bin/env bash
 
-# ./script/patch-npm-version.ts
+# brew install jq
+./script/patch-npm-version.ts
 
-# VERSION=$(jq -r '.version' package.json )
-# npm version $VERSION --workspaces --force
+VERSION=$(jq -r '.version' package.json )
+npm version $VERSION --workspaces --force
 
-# # This is not great, but we need to get the dependencies to workspaces
-# jq --arg version $VERSION \
-#     '.dependencies."quicktype-core" = $version | .dependencies."quicktype-graphql-input" = $version | .dependencies."quicktype-typescript-input" = $version' \
-#     package.json > package.1.json
-# mv package.1.json package.json
+# This is not great, but we need to get the dependencies to workspaces
+jq --arg version $VERSION \
+    '.dependencies."@karosli/quicktype-core" = $version | .dependencies."@karosli/quicktype-graphql-input" = $version | .dependencies."@karosli/quicktype-typescript-input" = $version' \
+    package.json > package.1.json
+mv package.1.json package.json
 
-# npm publish
+# 指定为公开库
+npm publish --access public
 
 
-# jq --arg version $VERSION \
-#     '.dependencies."quicktype-core" = $version' \
-#     packages/quicktype-typescript-input/package.json > package.1.json
+jq --arg version $VERSION \
+    '.dependencies."@karosli/quicktype-core" = $version' \
+    packages/quicktype-typescript-input/package.json > package.1.json
     
-# mv package.1.json packages/quicktype-typescript-input/package.json
+mv package.1.json packages/quicktype-typescript-input/package.json
 
-# jq --arg version $VERSION \
-#     '.dependencies."quicktype-core" = $version' \
-#     packages/quicktype-graphql-input/package.json > package.1.json
+jq --arg version $VERSION \
+    '.dependencies."@karosli/quicktype-core" = $version' \
+    packages/quicktype-graphql-input/package.json > package.1.json
     
-# mv package.1.json packages/quicktype-graphql-input/package.json
+mv package.1.json packages/quicktype-graphql-input/package.json
 
-# npm publish --workspaces --if-present
-
-# 发布 quicktype-core
-cd packages/quicktype-core
-npm publish --access public
-
-cd ../..
-cd packages/quicktype-graphql-input
-npm publish --access public
-
-cd ../..
-cd packages/quicktype-typescript-input
-npm publish --access public
-cd ../..
-
-# 发布 quicktype 指定为公开库
-npm publish --access public
+# 带 @karosli 的库，默认被认为是私有库，需要添加 --access public 修改为公开权限
+npm publish --workspaces --if-present --access public
