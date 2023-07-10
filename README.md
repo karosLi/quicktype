@@ -266,7 +266,7 @@ https://segmentfault.com/a/1190000021639944
 
 ### 运行补充
 
-编译
+本地编译
 ```bash
 npm run build
 ```
@@ -504,4 +504,10 @@ import Foundation
         ]
     }
 }
+```
+
+#### 全局安装
+
+```bash
+sudo npm install -g @karosli/quicktype
 ```

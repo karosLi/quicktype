@@ -28,5 +28,10 @@
 
 # npm publish --workspaces --if-present
 
-# 指定为公开库
+# 发布 quicktype-core
+# cd packages/quicktype-core
+# npm publish --access public
+# cd -
+
+# 发布 quicktype 指定为公开库
 npm publish --access public
