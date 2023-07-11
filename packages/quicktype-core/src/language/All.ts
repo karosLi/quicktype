@@ -9,6 +9,7 @@ import { CPlusPlusTargetLanguage } from "./CPlusPlus";
 import { ObjectiveCTargetLanguage } from "./Objective-C";
 import { ObjectiveCYYModelTargetLanguage } from "./Objective-C-YYModel";
 import { JavaTargetLanguage } from "./Java";
+import { JavaGSONTargetLanguage } from "./Java-GSON";
 import { JavaScriptTargetLanguage } from "./JavaScript";
 import { JavaScriptPropTypesTargetLanguage } from "./JavaScriptPropTypes";
 import { TypeScriptTargetLanguage, FlowTargetLanguage } from "./TypeScriptFlow";
@@ -40,6 +41,7 @@ export const all: TargetLanguage[] = [
     new ObjectiveCTargetLanguage(),
     new ObjectiveCYYModelTargetLanguage(),
     new JavaTargetLanguage(),
+    new JavaGSONTargetLanguage(),
     new TypeScriptTargetLanguage(),
     new JavaScriptTargetLanguage(),
     new JavaScriptPropTypesTargetLanguage(),

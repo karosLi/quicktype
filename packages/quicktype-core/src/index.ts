@@ -90,6 +90,7 @@ export { GoTargetLanguage, GoRenderer, goOptions } from "./language/Golang";
 export { ObjectiveCTargetLanguage, ObjectiveCRenderer, objcOptions } from "./language/Objective-C";
 export { ObjectiveCYYModelTargetLanguage, ObjectiveCYYModelRenderer, objcYYModelOptions } from "./language/Objective-C-YYModel";
 export { JavaTargetLanguage, JavaRenderer, javaOptions } from "./language/Java";
+export { JavaGSONTargetLanguage, JavaGSONRenderer, javaGSONOptions } from "./language/Java-GSON";
 export { JavaScriptTargetLanguage, JavaScriptRenderer, javaScriptOptions } from "./language/JavaScript";
 export {
     JavaScriptPropTypesTargetLanguage,

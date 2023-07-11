@@ -543,11 +543,11 @@ export class GraphQLInput implements Input<GraphQLSourceData> {
         return undefined;
     }
 
-    async addTypes(ctx: RunContext, typeBuilder: TypeBuilder): Promise<void> {
-        return this.addTypesSync(ctx, typeBuilder);
+    async addTypes(ctx: RunContext, typeBuilder: TypeBuilder, inferMaps: boolean, inferEnums: boolean, fixedTopLevels: boolean): Promise<void> {
+        return this.addTypesSync(ctx, typeBuilder, inferMaps, inferEnums, fixedTopLevels);
     }
 
-    addTypesSync(_ctx: RunContext, typeBuilder: TypeBuilder): void {
+    addTypesSync(_ctx: RunContext, typeBuilder: TypeBuilder, inferMaps: boolean, inferEnums: boolean, fixedTopLevels: boolean): void {
         for (const [name, { schema, query }] of this._topLevels) {
             const newTopLevels = makeGraphQLQueryTypes(name, typeBuilder, schema, query);
             for (const [actualName, t] of newTopLevels) {
