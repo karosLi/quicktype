@@ -9,7 +9,7 @@
             {
                 "id": 5,
                 "num": 8,
-                "discount": 8
+                "discount": 8.0
             }
         ],
         "discount_start": 1677741857,

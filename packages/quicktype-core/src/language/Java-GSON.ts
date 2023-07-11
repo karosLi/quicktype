@@ -1,3 +1,4 @@
+import { iterableSome, iterableFirst, mapContains, mapFirst, mapSome } from "collection-utils";
 import { anyTypeIssueAnnotation, nullTypeIssueAnnotation } from "../Annotation";
 import { ConvenienceRenderer, ForbiddenWordsInfo } from "../ConvenienceRenderer";
 import { DependencyName, funPrefixNamer, Name, Namer } from "../Naming";
@@ -34,7 +35,7 @@ export const javaGSONOptions = {
             ["array", false],
             ["list", true]
         ],
-        "array"
+        "list"
     ),
     justTypes: new BooleanOption("just-types", "Plain types only", false),
     dateTimeProvider: new EnumOption(
@@ -46,7 +47,7 @@ export const javaGSONOptions = {
         ],
         "java8"
     ),
-    acronymStyle: acronymOption(AcronymStyleOptions.Pascal),
+    acronymStyle: acronymOption(AcronymStyleOptions.Camel),
     // FIXME: Do this via a configurable named eventually.
     packageName: new StringOption("package", "Generated package name", "NAME", "io.quicktype"),
     lombok: new BooleanOption("lombok", "Use lombok", false, "primary"),
@@ -76,10 +77,10 @@ export class JavaGSONTargetLanguage extends TargetLanguage {
 
     protected makeRenderer(renderContext: RenderContext, untypedOptionValues: { [name: string]: any }): JavaGSONRenderer {
         const options = getOptionValues(javaGSONOptions, untypedOptionValues);
-        if (options.justTypes) {
-            return new JavaGSONRenderer(this, renderContext, options);
-        }
-        return new JacksonGSONRenderer(this, renderContext, options);
+        // if (options.justTypes) {
+        return new JavaGSONRenderer(this, renderContext, options);
+        // }
+        // return new JacksonGSONRenderer(this, renderContext, options);
     }
 
     get stringTypeMapping(): StringTypeMapping {
@@ -423,6 +424,13 @@ class JavaLegacyDateTimeProvider extends JavaDateTimeProvider {
     }
 }
 
+function splitExtension(filename: string): [string, string] {
+    const i = filename.lastIndexOf(".");
+    const extension = i !== -1 ? filename.split(".").pop() : "m";
+    filename = i !== -1 ? filename.slice(0, i) : filename;
+    return [filename, extension === undefined ? "m" : extension];
+}
+
 export class JavaGSONRenderer extends ConvenienceRenderer {
     private _currentFilename: string | undefined;
     private readonly _gettersAndSettersForPropertyName = new Map<Name, [Name, Name]>();
@@ -571,13 +579,15 @@ export class JavaGSONRenderer extends ConvenienceRenderer {
         assert(this._currentFilename === undefined, "Previous file wasn't finished");
         // FIXME: The filenames should actually be Sourcelikes, too
         this._currentFilename = `${this.sourcelikeToString(basename)}.java`;
-        // FIXME: Why is this necessary?
-        this.ensureBlankLine();
-        if (!this._haveEmittedLeadingComments && this.leadingComments !== undefined) {
-            this.emitCommentLines(this.leadingComments);
-            this.ensureBlankLine();
-            this._haveEmittedLeadingComments = true;
-        }
+
+        // 让所有类都生成在一个文件中
+        // // FIXME: Why is this necessary?
+        // this.ensureBlankLine();
+        // if (!this._haveEmittedLeadingComments && this.leadingComments !== undefined) {
+        //     this.emitCommentLines(this.leadingComments);
+        //     this.ensureBlankLine();
+        //     this._haveEmittedLeadingComments = true;
+        // }
     }
 
     protected finishFile(): void {
@@ -586,7 +596,7 @@ export class JavaGSONRenderer extends ConvenienceRenderer {
     }
 
     protected emitPackageAndImports(imports: string[]): void {
-        this.emitLine("package ", this._options.packageName, ";");
+        // this.emitLine("package ", this._options.packageName, ";");
         this.ensureBlankLine();
         for (const pkg of imports) {
             this.emitLine("import ", pkg, ";");
@@ -594,7 +604,7 @@ export class JavaGSONRenderer extends ConvenienceRenderer {
     }
 
     protected emitFileHeader(fileName: Sourcelike, imports: string[]): void {
-        this.startFile(fileName);
+        // this.startFile(fileName);
         this.emitPackageAndImports(imports);
         this.ensureBlankLine();
     }
@@ -627,7 +637,7 @@ export class JavaGSONRenderer extends ConvenienceRenderer {
             _anyType => maybeAnnotated(withIssues, anyTypeIssueAnnotation, "Object"),
             _nullType => maybeAnnotated(withIssues, nullTypeIssueAnnotation, "Object"),
             _boolType => (reference ? "Boolean" : "boolean"),
-            _integerType => (reference ? "Long" : "long"),
+            _integerType => (reference ? "Integer" : "int"),
             _doubleType => (reference ? "Double" : "double"),
             _stringType => "String",
             arrayType => {
@@ -772,43 +782,47 @@ export class JavaGSONRenderer extends ConvenienceRenderer {
         return [...new Set(imports)];
     }
 
-    protected emitClassDefinition(c: ClassType, className: Name): void {
+    protected emitClassDefinition(c: ClassType, className: Name, filename: string): void {
         let imports = [...this.importsForType(c), ...this.importsForClass(c)];
 
-        this.emitFileHeader(className, imports);
+        // this.emitFileHeader(className, imports);
+        // this.emitFileHeader(filename, imports);
         this.emitDescription(this.descriptionForType(c));
         this.emitClassAttributes(c, className);
         this.emitBlock(["public class ", className], () => {
             this.forEachClassProperty(c, "none", (name, jsonName, p) => {
-                if (this._options.lombok && this._options.lombokCopyAnnotations) {
-                    const getter = this.annotationsForAccessor(c, className, name, jsonName, p, false);
-                    const setter = this.annotationsForAccessor(c, className, name, jsonName, p, true);
-                    if (getter.length !== 0) {
-                        this.emitLine("@lombok.Getter(onMethod_ = {" + getter.join(", ") + "})");
-                    }
-                    if (setter.length !== 0) {
-                        this.emitLine("@lombok.Setter(onMethod_ = {" + setter.join(", ") + "})");
-                    }
-                }
-                this.emitLine("private ", this.javaType(false, p.type, true), " ", name, ";");
+                // if (this._options.lombok && this._options.lombokCopyAnnotations) {
+                //     const getter = this.annotationsForAccessor(c, className, name, jsonName, p, false);
+                //     const setter = this.annotationsForAccessor(c, className, name, jsonName, p, true);
+                //     if (getter.length !== 0) {
+                //         this.emitLine("@lombok.Getter(onMethod_ = {" + getter.join(", ") + "})");
+                //     }
+                //     if (setter.length !== 0) {
+                //         this.emitLine("@lombok.Setter(onMethod_ = {" + setter.join(", ") + "})");
+                //     }
+                // }
+
+                const annotations: string[] = ['@SerializedName("' + stringEscape(jsonName) + '")'];
+                this.emitLine(annotations);
+                this.emitLine("public ", this.javaType(false, p.type, true), " ", name, ";");
             });
-            if (!this._options.lombok) {
-                this.forEachClassProperty(c, "leading-and-interposing", (name, jsonName, p) => {
-                    this.emitDescription(this.descriptionForClassProperty(c, jsonName));
-                    const [getterName, setterName] = defined(this._gettersAndSettersForPropertyName.get(name));
-                    const rendered = this.javaType(false, p.type);
-                    this.annotationsForAccessor(c, className, name, jsonName, p, false).forEach(annotation =>
-                        this.emitLine(annotation)
-                    );
-                    this.emitLine("public ", rendered, " ", getterName, "() { return ", name, "; }");
-                    this.annotationsForAccessor(c, className, name, jsonName, p, true).forEach(annotation =>
-                        this.emitLine(annotation)
-                    );
-                    this.emitLine("public void ", setterName, "(", rendered, " value) { this.", name, " = value; }");
-                });
-            }
+            // if (!this._options.lombok) {
+            //     this.forEachClassProperty(c, "leading-and-interposing", (name, jsonName, p) => {
+            //         this.emitDescription(this.descriptionForClassProperty(c, jsonName));
+            //         const [getterName, setterName] = defined(this._gettersAndSettersForPropertyName.get(name));
+            //         const rendered = this.javaType(false, p.type);
+            //         this.annotationsForAccessor(c, className, name, jsonName, p, false).forEach(annotation =>
+            //             this.emitLine(annotation)
+            //         );
+            //         this.emitLine("public ", rendered, " ", getterName, "() { return ", name, "; }");
+            //         this.annotationsForAccessor(c, className, name, jsonName, p, true).forEach(annotation =>
+            //             this.emitLine(annotation)
+            //         );
+            //         this.emitLine("public void ", setterName, "(", rendered, " value) { this.", name, " = value; }");
+            //     });
+            // }
         });
-        this.finishFile();
+        // this.finishFile();
     }
 
     protected unionField(u: UnionType, t: Type, withIssues = false): { fieldType: Sourcelike; fieldName: Sourcelike } {
@@ -826,10 +840,11 @@ export class JavaGSONRenderer extends ConvenienceRenderer {
         // empty
     }
 
-    protected emitUnionDefinition(u: UnionType, unionName: Name): void {
+    protected emitUnionDefinition(u: UnionType, unionName: Name, filename: string): void {
         const imports = [...this.importsForType(u), ...this.importsForUnionMembers(u)];
 
-        this.emitFileHeader(unionName, imports);
+        // this.emitFileHeader(unionName, imports);
+        // this.emitFileHeader(filename, imports);
         this.emitDescription(this.descriptionForType(u));
         const [, nonNulls] = removeNullFromUnion(u);
 
@@ -841,7 +856,7 @@ export class JavaGSONRenderer extends ConvenienceRenderer {
             }
             this.emitUnionSerializer(u, unionName);
         });
-        this.finishFile();
+        // this.finishFile();
     }
 
     protected emitEnumSerializationAttributes(_e: EnumType) {
@@ -852,8 +867,9 @@ export class JavaGSONRenderer extends ConvenienceRenderer {
         // Empty
     }
 
-    protected emitEnumDefinition(e: EnumType, enumName: Name): void {
-        this.emitFileHeader(enumName, this.importsForType(e));
+    protected emitEnumDefinition(e: EnumType, enumName: Name, filename: string): void {
+        // this.emitFileHeader(enumName, this.importsForType(e));
+        // this.emitFileHeader(filename, this.importsForType(e));
         this.emitDescription(this.descriptionForType(e));
         const caseNames: Sourcelike[] = [];
         this.forEachEnumCase(e, "none", name => {
@@ -886,16 +902,28 @@ export class JavaGSONRenderer extends ConvenienceRenderer {
                 this.emitLine('throw new IOException("Cannot deserialize ', enumName, '");');
             });
         });
-        this.finishFile();
+        // this.finishFile();
     }
 
-    protected emitSourceStructure(): void {
+    protected emitSourceStructure(proposedFilename: string): void {
+        const fileMode = proposedFilename !== "stdout";
+        if (!fileMode) {
+            // We don't have a filename, so we use a top-level name
+            const firstTopLevel = defined(mapFirst(this.topLevels));
+            proposedFilename = this.sourcelikeToString(this.nameForNamedType(firstTopLevel)) + ".m";
+        }
+        const [filename, extension] = splitExtension(proposedFilename);
+
+        // console.log(`emit file ${filename}.${extension}`);
+        // 所有类都写在一个文件里
+        this.startFile(filename);
         this.forEachNamedType(
             "leading-and-interposing",
-            (c: ClassType, n: Name) => this.emitClassDefinition(c, n),
-            (e, n) => this.emitEnumDefinition(e, n),
-            (u, n) => this.emitUnionDefinition(u, n)
+            (c: ClassType, n: Name) => this.emitClassDefinition(c, n, filename),
+            (e, n) => this.emitEnumDefinition(e, n, filename),
+            (u, n) => this.emitUnionDefinition(u, n, filename)
         );
+        this.finishFile();
     }
 }
 
@@ -1438,8 +1466,8 @@ export class JacksonGSONRenderer extends JavaGSONRenderer {
         this.finishFile();
     }
 
-    protected emitSourceStructure(): void {
-        this.emitConverterClass();
-        super.emitSourceStructure();
+    protected emitSourceStructure(proposedFilename: string): void {
+        // this.emitConverterClass();
+        super.emitSourceStructure(proposedFilename);
     }
 }
