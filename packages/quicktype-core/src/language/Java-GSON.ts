@@ -580,14 +580,13 @@ export class JavaGSONRenderer extends ConvenienceRenderer {
         // FIXME: The filenames should actually be Sourcelikes, too
         this._currentFilename = `${this.sourcelikeToString(basename)}.java`;
 
-        // 让所有类都生成在一个文件中
-        // // FIXME: Why is this necessary?
-        // this.ensureBlankLine();
-        // if (!this._haveEmittedLeadingComments && this.leadingComments !== undefined) {
-        //     this.emitCommentLines(this.leadingComments);
-        //     this.ensureBlankLine();
-        //     this._haveEmittedLeadingComments = true;
-        // }
+        // FIXME: Why is this necessary?
+        this.ensureBlankLine();
+        if (!this._haveEmittedLeadingComments && this.leadingComments !== undefined) {
+            this.emitCommentLines(this.leadingComments);
+            this.ensureBlankLine();
+            this._haveEmittedLeadingComments = true;
+        }
     }
 
     protected finishFile(): void {
@@ -604,8 +603,8 @@ export class JavaGSONRenderer extends ConvenienceRenderer {
     }
 
     protected emitFileHeader(fileName: Sourcelike, imports: string[]): void {
-        // this.startFile(fileName);
-        this.emitPackageAndImports(imports);
+        this.startFile(fileName);
+        // this.emitPackageAndImports(imports);
         this.ensureBlankLine();
     }
 
@@ -785,7 +784,7 @@ export class JavaGSONRenderer extends ConvenienceRenderer {
     protected emitClassDefinition(c: ClassType, className: Name, filename: string): void {
         let imports = [...this.importsForType(c), ...this.importsForClass(c)];
 
-        // this.emitFileHeader(className, imports);
+        this.emitFileHeader(className, imports);
         // this.emitFileHeader(filename, imports);
         this.emitDescription(this.descriptionForType(c));
         this.emitClassAttributes(c, className);
@@ -822,7 +821,7 @@ export class JavaGSONRenderer extends ConvenienceRenderer {
             //     });
             // }
         });
-        // this.finishFile();
+        this.finishFile();
     }
 
     protected unionField(u: UnionType, t: Type, withIssues = false): { fieldType: Sourcelike; fieldName: Sourcelike } {
@@ -843,7 +842,7 @@ export class JavaGSONRenderer extends ConvenienceRenderer {
     protected emitUnionDefinition(u: UnionType, unionName: Name, filename: string): void {
         const imports = [...this.importsForType(u), ...this.importsForUnionMembers(u)];
 
-        // this.emitFileHeader(unionName, imports);
+        this.emitFileHeader(unionName, imports);
         // this.emitFileHeader(filename, imports);
         this.emitDescription(this.descriptionForType(u));
         const [, nonNulls] = removeNullFromUnion(u);
@@ -856,7 +855,7 @@ export class JavaGSONRenderer extends ConvenienceRenderer {
             }
             this.emitUnionSerializer(u, unionName);
         });
-        // this.finishFile();
+        this.finishFile();
     }
 
     protected emitEnumSerializationAttributes(_e: EnumType) {
@@ -868,7 +867,7 @@ export class JavaGSONRenderer extends ConvenienceRenderer {
     }
 
     protected emitEnumDefinition(e: EnumType, enumName: Name, filename: string): void {
-        // this.emitFileHeader(enumName, this.importsForType(e));
+        this.emitFileHeader(enumName, this.importsForType(e));
         // this.emitFileHeader(filename, this.importsForType(e));
         this.emitDescription(this.descriptionForType(e));
         const caseNames: Sourcelike[] = [];
@@ -902,7 +901,7 @@ export class JavaGSONRenderer extends ConvenienceRenderer {
                 this.emitLine('throw new IOException("Cannot deserialize ', enumName, '");');
             });
         });
-        // this.finishFile();
+        this.finishFile();
     }
 
     protected emitSourceStructure(proposedFilename: string): void {
@@ -915,15 +914,15 @@ export class JavaGSONRenderer extends ConvenienceRenderer {
         const [filename, extension] = splitExtension(proposedFilename);
 
         // console.log(`emit file ${filename}.${extension}`);
-        // 所有类都写在一个文件里
-        this.startFile(filename);
+        // 所有类都写在一个文件里，android 还是希望每个类型对应一个文件
+        // this.startFile(filename);
         this.forEachNamedType(
             "leading-and-interposing",
             (c: ClassType, n: Name) => this.emitClassDefinition(c, n, filename),
             (e, n) => this.emitEnumDefinition(e, n, filename),
             (u, n) => this.emitUnionDefinition(u, n, filename)
         );
-        this.finishFile();
+        // this.finishFile();
     }
 }
 
