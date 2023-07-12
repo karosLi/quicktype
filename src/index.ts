@@ -709,7 +709,7 @@ async function makeInputData(
     for (const source of sources) {
         switch (source.kind) {
             case "graphql":
-                await inputData.addSource("graphql", source, () => new GraphQLInput());
+                // await inputData.addSource("graphql", source, () => new GraphQLInput());
                 break;
             case "json":
                 await inputData.addSource("json", source, () =>

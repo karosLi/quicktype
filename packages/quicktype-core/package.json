@@ -1,6 +1,6 @@
 {
     "name": "@karosli/quicktype-core",
-    "version": "23.0.6",
+    "version": "23.0.8",
     "description": "The quicktype engine as a library",
     "license": "Apache-2.0",
     "main": "dist/index.js",
