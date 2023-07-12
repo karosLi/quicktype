@@ -37,6 +37,7 @@
     "readable-stream": "^4.3.0",
     "stream-json": "1.7.5",
     "string-to-stream": "^3.0.1",
+    "strip-json-comments-cjs": "^5.0.0",
     "typescript": "4.9.5"
   },
   "devDependencies": {

@@ -8,6 +8,9 @@ import { messageError, panic } from "../../index";
 const isURL = require("is-url");
 import fetch from "cross-fetch";
 
+import stripJsonComments from "strip-json-comments-cjs"
+const stringToStream = require("string-to-stream");
+
 interface HttpHeaders {
     [key: string]: string;
 }
@@ -36,20 +39,33 @@ function parseHeaders(httpHeaders?: string[]): HttpHeaders {
 
 export async function readableFromFileOrURL(fileOrURL: string, httpHeaders?: string[]): Promise<Readable> {
     try {
-        if (isURL(fileOrURL)) {
+        if (isURL(fileOrURL)) {// 远程 json 地址
+            // console.log("isURL(fileOrURL)");
             const response = await fetch(fileOrURL, {
                 headers: parseHeaders(httpHeaders)
             });
-            return defined(response.body) as unknown as Readable;
-        } else if (isNode) {
+
+            // 获取纯文本
+            const text = await response.text();
+            // 去掉注释
+            const textWithoutComment = stripJsonComments(text);
+            return defined(stringToStream(textWithoutComment)) as unknown as Readable;
+            // return defined(response.body) as unknown as Readable;
+        } else if (isNode) {// 本地 json
+            // console.log("isNode");
             if (fileOrURL === "-") {
                 // Cast node readable to isomorphic readable from readable-stream
                 return process.stdin as unknown as Readable;
             }
             const filePath = fs.lstatSync(fileOrURL).isSymbolicLink() ? fs.readlinkSync(fileOrURL) : fileOrURL;
             if (fs.existsSync(filePath)) {
-                // Cast node readable to isomorphic readable from readable-stream
-                return fs.createReadStream(filePath, "utf8") as unknown as Readable;
+                // 获取纯文本
+                const text = fs.readFileSync(filePath, "utf-8");
+                // 去掉注释
+                const textWithoutComment = stripJsonComments(text);
+                return defined(stringToStream(textWithoutComment)) as unknown as Readable;
+                // // Cast node readable to isomorphic readable from readable-stream
+                // return fs.createReadStream(filePath, "utf8") as unknown as Readable;
             }
         }
     } catch (e) {

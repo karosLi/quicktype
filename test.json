@@ -12,11 +12,14 @@
                 "discount": 8.0
             }
         ],
-        "discount_start": 1677741857,
+        "discount_start": 1677741857,// 注释
         "discount_end": 1677741857
     },
     "info": {
         "anim_type": 1,
         "anim_url": ""
+    },
+    "info1": {
+        "anim_url": ""// 是多少
     }
 }
