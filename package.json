@@ -1,6 +1,6 @@
 {
   "name": "@karosli/quicktype",
-  "version": "23.0.8",
+  "version": "23.0.10",
   "license": "Apache-2.0",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -31,13 +31,11 @@
     "graphql": "^0.11.7",
     "lodash": "^4.17.21",
     "moment": "^2.29.4",
-    "@karosli/quicktype-core": "23.0.8",
-    "@karosli/quicktype-graphql-input": "23.0.8",
-    "@karosli/quicktype-typescript-input": "23.0.8",
+    "@karosli/quicktype-core": "23.0.10",
+    "@karosli/quicktype-graphql-input": "23.0.10",
+    "@karosli/quicktype-typescript-input": "23.0.10",
     "readable-stream": "^4.3.0",
     "stream-json": "1.7.5",
-    "string-to-stream": "^3.0.1",
-    "strip-json-comments-cjs": "^5.0.0",
     "typescript": "4.9.5"
   },
   "devDependencies": {

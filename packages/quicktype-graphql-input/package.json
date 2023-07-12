@@ -1,6 +1,6 @@
 {
   "name": "@karosli/quicktype-graphql-input",
-  "version": "23.0.8",
+  "version": "23.0.10",
   "package": "Package for using GraphQL as an input language to quicktype",
   "license": "Apache-2.0",
   "main": "dist/index.js",
@@ -12,7 +12,7 @@
     "tslint": "tslint --project ."
   },
   "dependencies": {
-    "@karosli/quicktype-core": "23.0.8",
+    "@karosli/quicktype-core": "23.0.10",
     "collection-utils": "^1.0.1",
     "graphql": "^0.11.7"
   },
